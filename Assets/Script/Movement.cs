@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     
     public float speed = 15f;
     public float gravity = -9.8f;
+    public float jumpHeiht = 3;
 
     private CharacterController controller;
     private bool isGrounded;
@@ -22,11 +23,20 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
+        isGrounded = Physics.CheckSphere(feet.position, 0.4f, groundMask);
+
+        if (isGrounded) y = 0;
+
         var input = new Vector3();
         input.x = Input.GetAxis("Horizontal");
         input.z = Input.GetAxis("Vertical");
 
         var move = (transform.right * input.x + transform.forward * input.z) * speed * Time.deltaTime;
+
+        if(isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            y = Mathf.Sqrt(jumpHeiht * -2f * gravity) * Time.deltaTime;
+        }
 
         y += gravity * Time.deltaTime * Time.deltaTime;
         move.y = y;
