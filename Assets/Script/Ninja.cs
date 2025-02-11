@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,6 +26,8 @@ public class Ninja : MonoBehaviour
     
     void Update()
     {
+        animator.SetFloat("Speed", agent.velocity.magnitude);
+
         var distance = Vector3.Distance(transform.position, target.position);
 
         if (distance >= runDistance ) 
@@ -35,9 +38,28 @@ public class Ninja : MonoBehaviour
 
         animator.SetBool("run", distance >= runDistance);
 
-        if(target != null)
+        if(target != null && agent.enabled)
         {
             agent.SetDestination(target.position);
         }
+
+
+
+    }
+
+
+    public void GetHurt()
+    {
+
+        animator.Play("Head Hit 1");
+        StartCoroutine(StopAndwait());
+
+    }
+
+    IEnumerator StopAndwait()
+    {
+        agent.enabled = false;
+        yield return new WaitForSeconds(2);
+        agent.enabled = true;
     }
 }

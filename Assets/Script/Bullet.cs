@@ -23,6 +23,10 @@ public class Bullet : MonoBehaviour
         //print($"Hit: {other.gameObject.name} for {Random.Range(damageRange.x, damageRange.y)}");
         var damage = Random.Range(damageRange.x, damageRange.y);
         DamageManager.instance.DisplayDamage((int)damage,transform.position);
+
+        var ninja = other.gameObject.GetComponent<Ninja>();
+        if (ninja != null) ninja.GetHurt();
+
         Destroy(gameObject);
     }
 }
